@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DITA Topic//EN" "technicalContent/dtd/topic.dtd">
+<section id="akeneoLocales">
+   #set ($data = ${konnect_data["_embedded"]})
+   <table>
+      <tgroup cols="7">
+            <colspec colwidth="4.2*" colname="col_1"></colspec>
+            <colspec colwidth="4.2*" colname="col_2"></colspec>
+         <thead>
+            <row>
+               <entry>
+                  <b>Code</b>
+               </entry>
+               <entry>
+                  <b>Enabled</b>
+               </entry>
+            </row>
+         </thead>
+         <tbody>
+            #foreach(${row} in $data.items)
+               <row>
+                  <entry>${row.code}</entry>
+                  <entry>${row.enabled}</entry>
+               </row>
+               #end
+         </tbody>
+      </tgroup>
+   </table>
+</section>

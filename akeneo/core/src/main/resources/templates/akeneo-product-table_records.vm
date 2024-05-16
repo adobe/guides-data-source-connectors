@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DITA Topic//EN" "technicalContent/dtd/topic.dtd">
+<section id="akeneoProducts">
+   #set ($data = ${konnect_data["_embedded"]})
+   <table>
+      <tgroup cols="7">
+            <colspec colwidth="2*" colname="col_1"></colspec>
+            <colspec colwidth="4.2*" colname="col_2"></colspec>
+            <colspec colwidth="4.2*" colname="col_3"></colspec>
+            <colspec colwidth="4.2*" colname="col_4"></colspec>
+            <colspec colwidth="4.2*" colname="col_5"></colspec>
+            <colspec colwidth="4.2*" colname="col_6"></colspec>
+            <colspec colwidth="4.2*" colname="col_7"></colspec>
+         <thead>
+            <row>
+               <entry>
+                  <b>UUID</b>
+               </entry>
+               <entry>
+                  <b>Enabled</b>
+               </entry>
+               <entry>
+                  <b>Identifier</b>
+               </entry>
+                 <entry>
+                  <b>Family</b>
+               </entry>
+                 <entry>
+                  <b>Categories</b>
+               </entry>
+                <entry>
+                  <b>SKU</b>
+               </entry>
+               <entry>
+                  <b>Name</b>
+               </entry>
+            </row>
+         </thead>
+         <tbody>
+            #foreach(${row} in $data.items)
+               <row>
+                  <entry>${row.uuid}</entry>
+                  <entry>${row.enabled}</entry>
+                   <entry>${row.identifier}</entry>
+                  <entry>${row.family}</entry>
+                   <entry>#printList( $row.categories)</entry>
+                   <entry>#printList( $row.sku )</entry>
+                     <entry>#printList( $row.ProductName )</entry>
+               </row>
+               #end
+         </tbody>
+      </tgroup>
+   </table>
+
+#macro ( printList $list ) 
+    <ul>
+      #foreach ($value in $list)
+        <li>
+            $value
+        </li> 
+      #end
+    </ul>
+  #end
+
+
+</section>

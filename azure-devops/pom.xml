@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+Copyright 2024 Adobe. All rights reserved.
+This file is licensed to you under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License. You may obtain a copy
+of the License at http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under
+the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+OF ANY KIND, either express or implied. See the License for the specific language
+governing permissions and limitations under the License.-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.adobe.guides.konnect.definitions</groupId>
+    <artifactId>azure-devops-connector</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0.0</version>
+    <name>Guides Konnect - Azure DevOps Connector</name>
+    <description>Guides Konnect - Azure DevOps Connector</description>
+
+    <modules>
+        <module>all</module>
+        <module>core</module>
+    </modules>
+
+    <properties>
+        <aem.host>localhost</aem.host>
+        <aem.port>4502</aem.port>
+        <aem.publish.host>localhost</aem.publish.host>
+        <aem.publish.port>4503</aem.publish.port>
+        <sling.user>admin</sling.user>
+        <sling.password>admin</sling.password>
+        <vault.user>admin</vault.user>
+        <vault.password>admin</vault.password>
+        <core.wcm.components.version>2.22.12</core.wcm.components.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <aem.sdk.api>2023.11.14227.20231108T162349Z-231100</aem.sdk.api>
+        <aemanalyser.version>1.4.10</aemanalyser.version>
+        <componentGroupName>Guides Konnect - Azure DevOps Connector</componentGroupName>
+    </properties>
+
+    <build>
+        <plugins>
+            <!-- Maven Enforcer Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>enforce-maven</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireMavenVersion>
+                                    <version>[3.3.9,)</version>
+                                </requireMavenVersion>
+                                <requireJavaVersion>
+                                    <message>Maven must be executed with a Java 8 JRE or higher.</message>
+                                    <version>1.8.0</version>
+                                </requireJavaVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Maven Compiler Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>11</source>
+                    <target>11</target>
+                </configuration>
+            </plugin>
+        </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>3.0.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.8.1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.22.1</version>
+                    <configuration>
+                        <useSystemClassLoader>false</useSystemClassLoader>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.sling</groupId>
+                    <artifactId>sling-maven-plugin</artifactId>
+                    <version>2.4.0</version>
+                    <configuration>
+                        <slingUrl>http://${aem.host}:${aem.port}/system/console</slingUrl>
+                        <deploymentMethod>WebConsole</deploymentMethod>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.jackrabbit</groupId>
+                    <artifactId>filevault-package-maven-plugin</artifactId>
+                    <extensions>true</extensions>
+                    <version>1.1.6</version>
+                    <configuration>
+                        <filterSource>src/main/content/META-INF/vault/filter.xml</filterSource>
+                        <validatorsSettings>
+                            <jackrabbit-nodetypes>
+                                <options>
+                                    <!-- use the nodetypes and namespaces from the aem-nodetypes.jar provided in the plugin dependencies -->
+                                    <cnds>tccl:aem.cnd</cnds>
+                                </options>
+                            </jackrabbit-nodetypes>
+                        </validatorsSettings>
+                    </configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>biz.netcentric.aem</groupId>
+                            <artifactId>aem-nodetypes</artifactId>
+                            <version>6.5.7.0</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+                <plugin>
+                    <groupId>com.adobe.aem</groupId>
+                    <artifactId>aemanalyser-maven-plugin</artifactId>
+                    <version>${aemanalyser.version}</version>
+                    <extensions>true</extensions>
+                </plugin>
+                <plugin>
+                    <groupId>com.day.jcr.vault</groupId>
+                    <artifactId>content-package-maven-plugin</artifactId>
+                    <version>1.0.2</version>
+                    <configuration>
+                        <targetURL>http://${aem.host}:${aem.port}/crx/packmgr/service.jsp</targetURL>
+                        <failOnError>true</failOnError>
+                        <userId>${vault.user}</userId>
+                        <password>${vault.password}</password>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-enforcer-plugin</artifactId>
+                    <version>3.0.0</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+    <profiles>
+        <!-- Development profile: install only the bundle -->
+        <profile>
+            <id>autoInstallBundle</id>
+            <!--
+                      To enable this feature for a bundle, the sling-maven-plugin
+                      (without configuration) needs to be included:
+
+                      <plugin>
+                          <groupId>org.apache.sling</groupId>
+                          <artifactId>sling-maven-plugin</artifactId>
+                       </plugin>
+                  -->
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.apache.sling</groupId>
+                            <artifactId>sling-maven-plugin</artifactId>
+                            <executions>
+                                <execution>
+                                    <id>install-bundle</id>
+                                    <goals>
+                                        <goal>install</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+        <profile>
+            <id>autoInstallPackage</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.apache.jackrabbit</groupId>
+                            <artifactId>filevault-package-maven-plugin</artifactId>
+                            <executions>
+                                <execution>
+                                    <id>create-package</id>
+                                    <goals>
+                                        <goal>package</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                        </plugin>
+                        <plugin>
+                            <groupId>com.day.jcr.vault</groupId>
+                            <artifactId>content-package-maven-plugin</artifactId>
+                            <executions>
+                                <execution>
+                                    <id>install-package</id>
+                                    <goals>
+                                        <goal>install</goal>
+                                    </goals>
+                                    <configuration>
+                                        <targetURL>http://${aem.host}:${aem.port}/crx/packmgr/service.jsp</targetURL>
+                                    </configuration>
+                                </execution>
+                            </executions>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+        <profile>
+            <id>autoInstallPackagePublish</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.apache.jackrabbit</groupId>
+                            <artifactId>filevault-package-maven-plugin</artifactId>
+                            <executions>
+                                <execution>
+                                    <id>create-package</id>
+                                    <goals>
+                                        <goal>package</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                        </plugin>
+                        <plugin>
+                            <groupId>com.day.jcr.vault</groupId>
+                            <artifactId>content-package-maven-plugin</artifactId>
+                            <executions>
+                                <execution>
+                                    <id>install-package-publish</id>
+                                    <goals>
+                                        <goal>install</goal>
+                                    </goals>
+                                    <configuration>
+                                        <targetURL>
+                                            http://${aem.publish.host}:${aem.publish.port}/crx/packmgr/service.jsp
+                                        </targetURL>
+                                    </configuration>
+                                </execution>
+                            </executions>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+    </profiles>
+
+    <!-- ====================================================================== -->
+
+    <!-- D E P E N D E N C I E S -->
+
+    <!-- ====================================================================== -->
+
+    <dependencyManagement>
+        <dependencies>
+        </dependencies>
+    </dependencyManagement>
+</project>

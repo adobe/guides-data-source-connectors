@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "technicalContent/dtd/topic.dtd">
+<topic id="salsify-single-data">
+#set ($data = $konnect_data)
+
+#macro ( getFirstValueFromImageList )
+	#if( $data.containsKey("salsify:digital_assets"))
+	#set ($assets = ${data["salsify:digital_assets"]})
+		#if(!$assets.isEmpty() && $assets.size()>0 )
+			#set ($rowZero = $assets[0])
+			#set ($url = $rowZero["salsify:source_url"])
+			<image height="300" href="$url"  width="300"/>
+		#end
+	#end
+#end
+
+#macro (writeHeaderRecord)
+
+	<section id="salsify-header-single">
+		<table>
+			<colspec colwidth="2*" colname="col_1"></colspec>
+			<colspec colwidth="4.2*" colname="col_2"></colspec>
+			<tgroup cols="2">
+				<tbody>
+					<row>
+						<entry>#getFirstValueFromImageList()</entry>
+						<entry>
+							<p>${data["salsify:id"]}</p>
+							<p></p>
+							<p>${data["Product Name"]}</p>
+						</entry>
+					</row>
+				</tbody>
+			</tgroup>
+		</table>
+	</section>
+#end
+
+
+ #macro ( createData )
+	<title>${data["salsify:id"]}</title>
+    <body>#writeHeaderRecord()</body>
+ #end
+
+ #createData()
+</topic>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DITA Topic//EN" "technicalContent/dtd/topic.dtd">
+<section id="workitems-summary">
+    <title>Work Items Summary</title>
+    <table>
+        <tgroup cols="2">
+            <colspec colwidth="1*" colname="col_1"></colspec>
+            <colspec colwidth="4.2*" colname="col_2"></colspec>
+            <thead>
+                <row>
+                    <entry><b>ID</b></entry>
+                    <entry><b>Summary</b></entry>
+                </row>
+            </thead>
+            <tbody>
+                #foreach(${issue} in ${konnect_data.data})
+                 #foreach ($entry in $issue.fields.entrySet()) 
+                  #if($entry.key == "System.Title")
+                  #set ($string2 = "/_apis/")
+                  #set ($string1 = ${issue.url})
+                  #set($url=$string1.substring(0, $string1.indexOf($string2)))
+                    <row>
+                        <entry><xref href="${issue.url}" format="html" scope="external">${issue.id}</xref></entry>
+                        <entry>$url/_workitems/edit/${issue.id}</entry>
+                    </row>
+                #end
+                #end
+                #end
+            </tbody>
+        </tgroup>
+    </table>
+</section>

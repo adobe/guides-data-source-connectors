@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DITA Topic//EN" "technicalContent/dtd/topic.dtd">
+<section id="akeneoFamilies">
+   #set ($data = ${konnect_data["_embedded"]})
+   <table>
+      <tgroup cols="7">
+            <colspec colwidth="4.2*" colname="col_1"></colspec>
+            <colspec colwidth="4.2*" colname="col_2"></colspec>
+            <colspec colwidth="4.2*" colname="col_3"></colspec>
+         <thead>
+            <row>
+               <entry>
+                  <b>Code</b>
+               </entry>
+               <entry>
+                  <b>Attributes</b>
+               </entry>
+               <entry>
+                  <b>Attribute Label</b>
+               </entry>
+               <entry>
+                  <b>Attribute Requirements</b>
+               </entry>
+                <entry>
+                  <b>Labels</b>
+               </entry>
+            </row>
+         </thead>
+         <tbody>
+            #foreach(${row} in $data.items)
+               <row>
+                  <entry>${row.code}</entry>
+                   <entry>#printList( $row.attributes)</entry>
+                    <entry>${row.attribute_as_label}</entry>
+                     <entry>#printMap( $row.attribute_requirements)</entry>
+                      <entry>#printMap($row.labels)</entry>
+               </row>
+               #end
+         </tbody>
+      </tgroup>
+   </table>
+
+#macro ( printMap $map ) 
+    <p>
+      <table>
+        <tgroup cols="2">
+          <tbody>
+            #foreach ($entry in $map.entrySet()) 
+              #if ($entry.value.class.simpleName.contains("Map")) 
+                <row>
+                  <entry>$entry.key</entry>
+                  <entry>#printMap( $entry.value )</entry>
+                </row>
+              #elseif ($entry.value.class.simpleName.contains("List"))
+                <row>
+                  <entry>$entry.key</entry>
+                  <entry>#printList( $entry.value )</entry>
+                </row>
+              #else 
+                <row>
+                  <entry>$entry.key</entry>
+                  <entry>$entry.value</entry>
+                </row>
+              #end
+            #end
+          </tbody>
+        </tgroup>
+      </table>
+    </p>
+  #end
+
+#macro ( printList $list ) 
+    <ul>
+      #foreach ($value in $list)
+        <li>
+          #if ($value.class.simpleName.contains("Map")) 
+            #printMap( $value )
+          #elseif ($value.class.simpleName.contains("List"))
+            #printList( $value )
+          #else 
+            $value
+          #end
+        </li> 
+      #end
+    </ul>
+  #end
+
+
+</section>

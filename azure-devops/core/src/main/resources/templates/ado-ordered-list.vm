@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DITA Topic//EN" "technicalContent/dtd/topic.dtd">
+<section id="workitems-summary">
+    <title>Work Items Summary</title>
+    <ol>
+        #foreach(${issue} in ${konnect_data.data})
+            #foreach ($entry in $issue.fields.entrySet()) 
+                #if($entry.key == "System.Title")
+                    <li>${entry.value} (${issue.id})</li>
+                #end
+            #end
+        #end
+    </ol>
+</section>

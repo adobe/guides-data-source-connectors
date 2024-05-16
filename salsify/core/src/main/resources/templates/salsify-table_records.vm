@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DITA Topic//EN" "technicalContent/dtd/topic.dtd">
+<section id="salsifyData">
+   #set ($data = $konnect_data)
+   <table>
+      <tgroup cols="2">
+       <colspec colwidth="2*" colname="col_1"></colspec>
+            <colspec colwidth="4.2*" colname="col_2"></colspec>
+         <thead>
+            <row>
+               <entry>
+                  <b>Key</b>
+               </entry>
+               <entry>
+                  <b>Value</b>
+               </entry>
+            </row>
+         </thead>
+         <tbody>
+            #foreach(${row} in $data.data)
+          
+               #foreach ($entry in $row.entrySet()) 
+            #if($entry.key.startsWith("salsify:") && !$entry.key.startsWith("salsify:digital_assets"))
+               <row>
+                  <entry>$entry.key</entry>
+                  <entry>$entry.value</entry>
+               </row>
+            #elseif( $entry.key.startsWith("salsify:digital_assets") )
+            <row>
+                  <entry>$entry.key</entry>
+                  <entry>#printList( $entry.value )</entry>
+               </row>
+               #end
+            #end
+            #end
+         </tbody>
+      </tgroup>
+   </table>
+
+    #macro ( printList $list ) 
+    <ol>
+      #foreach ($value in $list)
+        <li>
+          #foreach ($row in $value.entrySet()) 
+            #if($row.key.startsWith("salsify:source_url"))
+            <image height="300" href="${row.value}"  width="300"/>
+          #end
+          #end
+        </li> 
+      
+       #end
+    </ol>
+ 
+  #end
+
+</section>

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DITA Topic//EN" "technicalContent/dtd/topic.dtd">
+<topic id="akeneo-single-data">
+   #set ($data = ${konnect_data})
+   <title>${data.identifier}</title>
+   <body>
+  
+  <p><b>Family</b>:${data["family"]} </p>
+
+ <p></p>
+   <p><b>Categories</b> :</p>
+   <p>#printList( $data.categories)</p>
+   <p></p>
+   <p><b>Details:</b></p>
+   <section id="akeneo-product-values">#printValuesMap( $data.values)</section>
+   <p></p>
+   <p><b>Price</b></p>
+   <section id="akeneo-product-prices">#printMap( $data.values , "price")</section>
+   <p></p>
+   <p><b>Name</b></p>
+    <section id="akeneo-product-names">#printMap( $data.values , "name")</section>
+   <p></p>
+   <p><b>Description</b></p>
+  <section id="akeneo-product-desc">#printMap( $data.values , "description")</section>
+   </body>
+
+   #macro ( printMap $map $param) 
+    <p>
+      <table>
+        <tgroup cols="2">
+          <tbody>
+            #foreach ($entry in $map.entrySet()) 
+             #if( $entry.key==$param)
+              #if ($entry.value.class.simpleName.contains("Map")) 
+                <row>
+                  #if( $entry.key!="data" && $entry.key!="amount" && $entry.key!="unit")
+                  <entry>$entry.key</entry>
+                  #end
+                  <entry>#printValuesMap( $entry.value )</entry>
+                </row>
+              #elseif ($entry.value.class.simpleName.contains("List"))
+                <row>
+                 #if( $entry.key!="data" && $entry.key!="amount" && $entry.key!="unit")
+                  <entry>$entry.key</entry>
+                  #end
+                  <entry>#printValuesList( $entry.value )</entry>
+                </row>
+              #else 
+                <row>
+                  #if( $entry.key!="data" && $entry.key!="amount" && $entry.key!="unit")
+                  <entry>$entry.key</entry>
+                  #end
+                  <entry>$entry.value</entry>
+                </row>
+              #end
+              #end
+            #end
+          </tbody>
+        </tgroup>
+      </table>
+    </p>
+  #end
+
+#macro ( printList $list ) 
+    <ul>
+      #foreach ($value in $list)
+        <li>
+          #if ($value.class.simpleName.contains("Map")) 
+            #printMap( $value )
+          #elseif ($value.class.simpleName.contains("List"))
+            #printList( $value )
+          #else 
+            $value
+          #end
+        </li> 
+      #end
+    </ul>
+  #end
+
+#macro ( printValuesList $list ) 
+    <ul>
+      #foreach ($value in $list)
+        <li>
+          #if ($value.class.simpleName.contains("Map")) 
+            #printValuesMap( $value )
+          #elseif ($value.class.simpleName.contains("List"))
+            #printValuesList( $value )
+          #else 
+            $value
+          #end
+        </li> 
+      #end
+    </ul>
+  #end
+
+  #macro ( printValuesMap $map ) 
+    <p>
+      <table>
+        <tgroup cols="2">
+          <tbody>
+            #foreach ($entry in $map.entrySet()) 
+             #if( $entry.key!="name" && $entry.key!="erp_name"&& $entry.key!="ProductName" && $entry.key!="description"&& $entry.key!="packshot" && $entry.key!="price")
+              #if ($entry.value.class.simpleName.contains("Map")) 
+             
+                <row>
+                 #if( $entry.key!="data" && $entry.key!="amount" && $entry.key!="unit")
+                  <entry>$entry.key</entry>
+                  #end
+                  <entry>#printValuesMap( $entry.value )</entry>
+                </row>
+              #elseif ($entry.value.class.simpleName.contains("List"))
+                <row>
+                   #if( $entry.key!="data" && $entry.key!="amount" && $entry.key!="unit")
+                  <entry>$entry.key</entry>
+                  #end
+                  <entry>#printValuesList( $entry.value )</entry>
+                </row>
+               
+              #else 
+                <row>
+                 #if( $entry.key!="data" && $entry.key!="amount" && $entry.key!="unit")
+                  <entry>$entry.key</entry>
+                  #end
+                  <entry>$entry.value</entry>
+                </row>
+              #end
+               #end
+            #end
+          </tbody>
+        </tgroup>
+      </table>
+    </p>
+  #end
+</topic>

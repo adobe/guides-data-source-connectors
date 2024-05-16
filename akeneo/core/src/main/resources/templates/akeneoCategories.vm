@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DITA Topic//EN" "technicalContent/dtd/topic.dtd">
+<section id="akeneoCategories">
+   #set ($data = ${konnect_data["_embedded"]})
+   <table>
+      <tgroup cols="7">
+            <colspec colwidth="4.2*" colname="col_1"></colspec>
+            <colspec colwidth="4.2*" colname="col_2"></colspec>
+            <colspec colwidth="4.2*" colname="col_3"></colspec>
+         <thead>
+            <row>
+               <entry>
+                  <b>Code</b>
+               </entry>
+               <entry>
+                  <b>Attributes</b>
+               </entry>
+               <entry>
+                  <b>Attribute Label</b>
+               </entry>
+               <entry>
+                  <b>Attribute Requirements</b>
+               </entry>
+                <entry>
+                  <b>Attribute Requirements</b>
+               </entry>
+            </row>
+         </thead>
+         <tbody>
+            #foreach(${row} in $data.items)
+               <row>
+                  <entry>${row.code}</entry>
+                  <entry>${row.parent}</entry>
+                   <entry>#printList( $row.labels)</entry>
+               </row>
+               #end
+         </tbody>
+      </tgroup>
+   </table>
+
+#macro ( printList $list ) 
+    <ul>
+      #foreach ($value in $list)
+        <li>
+            $value
+        </li> 
+      #end
+    </ul>
+  #end
+
+
+</section>

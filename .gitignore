@@ -1,0 +1,15 @@
+# These files will be ignored by Git
+**/target/
+**/*.classpath
+*.DS_Store
+**/.vscode/
+*.iml
+.idea
+embed
+.java-version
+.aio
+.repo
+.env
+**/.settings/
+**/*.project
+*.bak
