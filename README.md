@@ -15,8 +15,8 @@ providing a seamless experience for accessing data.
 
 ### 1. Konnect Interface Definitions [![javadoc](https://javadoc.io/badge2/com.adobe.aem.addon.guides/konnect-definitions/javadoc.svg)](https://javadoc.io/doc/com.adobe.aem.addon.guides/konnect-definitions)
 
-- Description: Connector implementation for Akeneo.
-- Usage: Use this connector to connect to Akeneo PIM and fetch data into AEM Guides.
+- Description: Interfaces for connector and configurations.
+- Usage: Use these interfaces to create connector implementations. 
 
 ### 2. Akeneo Connector [![javadoc](https://javadoc.io/badge2/com.adobe.aem.addon.guides/konnect-akeneo/javadoc.svg)](https://javadoc.io/doc/com.adobe.aem.addon.guides/konnect-akeneo)
 
